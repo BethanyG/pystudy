@@ -25,12 +25,25 @@ class Player(object):
         self.hand = []
         self.score = 0
         
-
+    #Three implementations, here - each has different issues displaying
+    #Do we want to move printing Player name here, or is that something 
+    #only calc score does?
+    
     def display_hand(self):
         for card in self.hand:
             
+            # 1: using unicards lib
             print(unicard(card.name + card.suite[0], color=True), end=' ')
-        
+            
+            
+            # 2: using unicode symbols for Suite
+            unicode_suites = {'Diamond':'\u2662', 'Spade':'\u2660','Heart':'\u2661', 'Club':'\u2663'}
+            print(card.name.upper() + unicode_suites[card.suite], end=' ')
+            
+            
+            # 3: simple name display (has layout implications)
+            print(card.name.upper() + ' of ' + card.suite + 's', end= ' ')
+            
         print()
 
             
@@ -99,7 +112,8 @@ class BlackJackTable(object):
             
             break    
     
-    
+    #The logic here still needs work.  Specifically, the case where the total
+    #is 9, and the player has 3 aces....
     def calc_score(self, hand):
         
         total = sum(scoring[card.name] for card in hand if card.name !='a') 
@@ -124,6 +138,12 @@ class BlackJackTable(object):
         #sum values
         #test for limit, if over then A =1
         #return total
+        
+        ####
+        
+        #if any player score is > than their chip balance, they go bust
+        #players going bust should be removed from the player list.
+        #does that logic belong here...or elsewhere??
     
         
     def run_game(self):
@@ -140,21 +160,22 @@ class BlackJackTable(object):
         for participant in participants:
             participant.score = self.calc_score(participant.hand)
             
-            #print(participant.name, participant.score)
+            print(participant.name, participant.score)
 
             participant.display_hand()
         
-        #Dealer goes last, and his hand is partially obscured (only 1st card is turned over)
-        #take bets
-        #dealer deals cards
-        #score calc for players
-        #board display
-        #final tally
-        #exit
+            #Dealer goes last, and his hand is partially obscured (only 1st card is turned over)
+            #take bets
+            #dealer deals cards
+            #score calc for players
+            #board display
+            #final tally
+            #exit
     
 
 
 #Main Game Loop or Class would go Here...
+
 def chip_up(player):    
     while True: 
         try:
