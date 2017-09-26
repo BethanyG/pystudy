@@ -109,7 +109,6 @@ class BlackJackTable(object):
                 continue
             
             player.bet = playerwager
-            
             break    
     
     #The logic here still needs work.  Specifically, the case where the total
@@ -149,7 +148,7 @@ class BlackJackTable(object):
     def run_game(self):
         
         participants = self.players[:]
-        participants.append(self.dealer)
+        participants.append(self.dealer) 
         
         for player in self.players:
             self.take_bet(player)
@@ -174,6 +173,7 @@ class BlackJackTable(object):
     
 
 
+
 #Main Game Loop or Class would go Here...
 
 def chip_up(player):    
@@ -185,20 +185,32 @@ def chip_up(player):
             continue
         if playerbalance < 0:
             continue
+        
         else:
-            player.chips= playerbalance
+            player.chips = playerbalance
+            break
 
         
 
 
 #Main code entry point - current code is here for testing, but this would
-#ultimatley call the main game loop....
+#ultimatley be in the main game loop, and this would just call that loop/class...
             
 if __name__ == '__main__':
-    table = BlackJackTable()
-    player = Player(chips=100, name='BG')
+    # Application Opens
+    print("Welcome to Scooter's Casino BlackJack Table \n")
+    
+    new_player = Player(chips=0, name=input("What is your name? ")[:10])
+    
+    print('Fantastic to have you %s !!!' %(new_player.name))
 
-    table.add_player(player)
+    chip_up(new_player)
+    
+    table = BlackJackTable()
+    table.add_player(new_player)
+    
+    print(new_player.name)
+    print(new_player.chips)
     
     table.run_game()
     
