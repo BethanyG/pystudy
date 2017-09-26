@@ -49,22 +49,53 @@ class BlackJackTable(object):
         random.shuffle(deck)
         return deck
     
+    
+    def add_player(self, player):
+        self.players.append(player)
+    
+    
+    def remove_player(self, player):
+        self.players.pop(player)
+    
+    
     def deal_cards(self, player, how_many=1):
         
         for _ in range(how_many):
             card = self.deck.pop()
             player.hand.append(card)
     
-    def add_player(self, player):
-        self.players.append(player)
     
-    def remove_player(self, player):
-        self.players.pop(player)
+    def hit_player(self, player):
+        card = self.deck.pop()
+        player.hand.append(card)
+    
+    
+    def take_bet(self, player):
+        
+        print('%s currently has %s chips' % (player.name, player.chips))
+       
+        while True:
+            try:
+                playerwager = int(input('Ok %s, so how much do you want to wager '
+                                        'on this hand of blackjack? ' % (player.name)))
+            except ValueError:
+                print('Seriously?  You cannot type a number?  Try again!')
+                continue
+            
+            if playerwager > player.chips or playerwager < 1:
+                print('No you cannot bet a negative amount and yes it must be '
+                      'less or equal to your chip balance.  Try again!')
+                continue
+            
+            player.bet = playerwager
+            
+            break    
     
     
     def calc_score(self, hand):
         
         total = sum(scoring[card.name] for card in hand if card.name !='a') 
+        
         aces = len([card.name for card in hand if card.name == 'a'])
         
         if total < 10 :
@@ -86,7 +117,7 @@ class BlackJackTable(object):
         #test for limit, if over then A =1
         #return total
     
-    
+        
     def run_game(self):
         
         participants = self.players[:]
@@ -108,29 +139,40 @@ class BlackJackTable(object):
         #Dealer goes last, and his hand is partially obscured (only 1st card is turned over)
         #take bets
         #dealer deals cards
-        #score calc
+        #score calc for players
         #board display
         #final tally
         #exit
     
+
+
+#Main Game Loop or Class would go Here...
+def chip_up(player):    
+    while True: 
+        try:
+            playerbalance = int(input('How much money do you have to chip up?'))
+        except ValueError:
+            print('Look you ding dong. A whole number!  Try again.')
+            continue
+        if playerbalance < 0:
+            continue
+        else:
+            player.chips= playerbalance
+
+        
+
+
+#Main code entry point
+if __name__ == '__main__':
+    table = BlackJackTable()
+    player = Player(chips=100, name='BG')
+
+    table.add_player(player)
     
-    def take_bet(self, player):
-        print('%s currently has %s chips' % (player.name, player.chips))
-        while True:
-            try:
-                playerwager = int(input('Ok %s, so how much do you want to wager '
-                                        'on this hand of blackjack? ' % (player.name)))
-            except ValueError:
-                print('Seriously?  You cannot type a number?  Try again!')
-                continue
-            
-            if playerwager > player.chips or playerwager < 1:
-                print('No you cannot bet a negative amount and yes it must be '
-                      'less or equal to your chip balance.  Try again!')
-                continue
-            
-            player.bet = playerwager
-            break    
+    table.run_game()
+    
+    
+  
      
     '''    
     def display_board(self):
@@ -170,33 +212,7 @@ class BlackJackTable(object):
         print("Currently it is %s's turn" % (whoseturn))
         print('')
 
-    def hit_player(self):
-        card = random.choice(self.deck)
-        self.deck.remove(card)
-        if self.phand[0] == '__':
-            self.phand[0] = card
-        elif self.phand[1] == '__':
-            self.phand[1] = card
-        elif self.phand[2] == '__':
-            self.phand[2] = card
-        elif self.phand[3] == '__':
-            self.phand[3] = card
-        elif self.phand[4] == '__':
-            self.phand[4] = card
-
-    def hit_dealer(self):
-        card = random.choice(self.deck)
-        self.deck.remove(card)
-        if self.dhand[0] == '__':
-            self.dhand[0] = card
-        elif self.dhand[1] == '__':
-            self.dhand[1] = card
-        elif self.dhand[2] == '__':
-            self.dhand[2] = card
-        elif self.dhand[3] == '__':
-            self.dhand[3] = card
-        elif self.dhand[4] == '__':
-            self.dhand[4] = card
+ 
 
 # This is a global function that helps pad filling to keep grid of board clean
 def pad(str1, fullLength):
@@ -320,27 +336,3 @@ def scott():
     print('Thank you for playing.')
     
 '''
-
-def chip_up(player):    
-    while True: 
-        try:
-            playerbalance = int(input('How much money do you have to chip up?'))
-        except ValueError:
-            print('Look you ding dong. A whole number!  Try again.')
-            continue
-        if playerbalance < 0:
-            continue
-        else:
-            player.chips= playerbalance
-
-        
-
-
-
-if __name__ == '__main__':
-    table = BlackJackTable()
-    player = Player(chips=100, name='BG')
-
-    table.add_player(player)
-    
-    table.run_game()
