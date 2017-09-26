@@ -3,8 +3,9 @@
 
 from collections import namedtuple
 from itertools import product
+from unicards import unicard
 import random
-import unicards
+
 
 Card = namedtuple("Card", "name, suite")
 names = ['a','2','3','4','5','6','7','8','9','10','k','q','j']
@@ -27,7 +28,7 @@ class Player(object):
     def display_hand(self):
         for card in self.hand:
             
-            print(card.name, card.suite, end=' ')
+            print(unicard(card.name + card.suite[0], color=True), end=' ')
         
         print()
             
@@ -36,8 +37,6 @@ class Dealer(Player):
     def __init__(self):
         super().__init__(chips=0, name='Dealer')
         
-
-
 
 class BlackJackTable(object):
     def __init__(self):
@@ -59,17 +58,30 @@ class BlackJackTable(object):
     def add_player(self, player):
         self.players.append(player)
     
-    def remove_player(self):
-        pass
+    def remove_player(self, player):
+        self.players.pop(player)
     
     
     def calc_score(self, hand):
         
-        total = sum(scoring[card.name] for card in hand)
+        total = sum(scoring[card.name] for card in hand if card.name !='a') 
+        aces = len([card.name for card in hand if card.name == 'a'])
         
+        if total < 10 :
+            total += 11 + aces - 1
+        
+        elif total == 10 and aces == 1:
+            total += 11
+        
+        elif total == 10 and aces > 1:
+            total += aces
+            
+        else:
+            total += aces
+            
         return total
     
-        #iterate throught hand, looking up value (default Ace)
+        #iterate throught hand, looking up value (filter out Ace)
         #sum values
         #test for limit, if over then A =1
         #return total
@@ -88,11 +100,12 @@ class BlackJackTable(object):
         
         for participant in participants:
             participant.score = self.calc_score(participant.hand)
-            print(participant.name, participant.score)
+            
+            #print(participant.name, participant.score)
 
             participant.display_hand()
         
-        #entering a global while loop for game -- where is this??
+        #Dealer goes last, and his hand is partially obscured (only 1st card is turned over)
         #take bets
         #dealer deals cards
         #score calc
