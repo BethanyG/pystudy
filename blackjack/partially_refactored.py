@@ -173,7 +173,6 @@ class BlackJackTable(object):
     
 
 
-
 #Main Game Loop or Class would go Here...
 
 def chip_up(player):    
@@ -190,16 +189,25 @@ def chip_up(player):
             player.chips = playerbalance
             break
 
-        
+
+#does thois go here..or in the table class??  
+#Feels like it really belongs in a utility class....        
+def display_board(player, dealer):
+    pass
+
+#don't even know if this is needed, but it does change display and scoring...
+#Dealer goes last, so there are two different turn 'modes'.
+def turn():
+    pass
 
 
 #Main code entry point - current code is here for testing, but this would
-#ultimatley be in the main game loop, and this would just call that loop/class...
-            
+#ultimatley be in the main game loop, and this would just call that loop/class...            
 if __name__ == '__main__':
     # Application Opens
     print("Welcome to Scooter's Casino BlackJack Table \n")
     
+    #this would be a for loop if there were n players.....
     new_player = Player(chips=0, name=input("What is your name? ")[:10])
     
     print('Fantastic to have you %s !!!' %(new_player.name))
@@ -207,6 +215,8 @@ if __name__ == '__main__':
     chip_up(new_player)
     
     table = BlackJackTable()
+    
+    #another for loop if there were n players added...
     table.add_player(new_player)
     
     print(new_player.name)
