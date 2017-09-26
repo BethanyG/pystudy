@@ -15,7 +15,8 @@ scoring = dict(zip(names,
 
 """  Start of Defining Objects  """
 
-
+#If we were making more than blackjack, should we consider an abstract *participant*
+#class with Player and Dealer inheriting from it?
 class Player(object):
     def __init__(self, chips, name):
         self.chips = chips
@@ -31,13 +32,20 @@ class Player(object):
             print(unicard(card.name + card.suite[0], color=True), end=' ')
         
         print()
-            
 
+            
+#The Dealer here is a specialized sort of player that doesn't have chips or a name.
+#Dealer's __init__ explicitly calls Player's __init__ with the specific parameters
+#set....this could also be done by simply calling player, but the rules of play
+#for the dealer are different, so we've made a seperate class.
 class Dealer(Player):
     def __init__(self):
         super().__init__(chips=0, name='Dealer')
-        
 
+
+
+        
+#This is a compairativley large class - should it be broken up?
 class BlackJackTable(object):
     def __init__(self):
         self.deck = self.get_new_deck()   
@@ -162,7 +170,9 @@ def chip_up(player):
         
 
 
-#Main code entry point
+#Main code entry point - current code is here for testing, but this would
+#ultimatley call the main game loop....
+            
 if __name__ == '__main__':
     table = BlackJackTable()
     player = Player(chips=100, name='BG')
@@ -172,8 +182,8 @@ if __name__ == '__main__':
     table.run_game()
     
     
-  
-     
+#Code yet to be re-organized.  
+########################################################################     
     '''    
     def display_board(self):
         # First need to calc the new info
