@@ -140,11 +140,16 @@ class BlackJackTable(object):
         
         ####
         
-        #if any player score is > than their chip balance, they go bust
+        #if any player loss is > than their chip balance, they go bust
         #players going bust should be removed from the player list.
         #does that logic belong here...or elsewhere??
     
-        
+    
+    def get_board():
+        pass
+    
+    
+    
     def run_game(self):
         
         participants = self.players[:]
@@ -156,13 +161,55 @@ class BlackJackTable(object):
         for participant in participants:
             self.deal_cards(participant, how_many=2)
         
-        for participant in participants:
-            participant.score = self.calc_score(participant.hand)
-            
-            print(participant.name, participant.score)
-
-            participant.display_hand()
         
+        #Display initial board here??
+        
+        
+        #While loop here??
+        for player in self.players:
+            player.score = self.calc_score(player.hand)
+            
+            #need additional while loop here if we have more than one player &
+            #want to do checks on input...
+            if player.score < 21:
+                
+                hitOrStick = ''
+                
+                while hitOrStick not in ('H' or 'S'):
+                    print('%s, your current score is: ' %(player.name), player.score)
+                    hitOrStick = str(input('What would you like to do? (H)it or (S)tick? '))
+                
+                    if hitOrStick not in ('H','S'):
+                        print('Do not be a dummy.  Press H or S for your choice then press Enter key.')
+                    
+                    if hitOrStick == 'H':
+                        hit_player(player)
+                        player.display_hand()
+                        
+                    if hitOrstick == 'S':
+                        player.display_hand()
+                        print("%s, you've chosen to stick at: " %(player.name), player.score)
+
+            elif player.score == 21:
+                print('You have hit 21, %s !!! Blackjack!  Well done.' %(player.name))
+                player.display_hand(player)
+                
+                print('The dealer can only tie you so you cannot lose.')
+  
+            
+            elif player.score > 21:
+                print("%s, you've busted with a score of: " %(player.name), player.score)
+                print("You've lost your bet of " + str(player.bet) + ' chips.')
+                
+                player.chips = player.chips - player.bet
+                
+                print('Your remaining chip balance is: ' + str(player.chips) + ' chips.')
+       
+        display_board()
+        print("Now it's the dealers turn.")
+
+            
+
             #Dealer goes last, and his hand is partially obscured (only 1st card is turned over)
             #take bets
             #dealer deals cards
@@ -172,7 +219,54 @@ class BlackJackTable(object):
             #exit
     
 
+   while whoseturn == playername:
+        if b.pscore < 21:
+            print('Your current score is ', b.pscore)
+            hitOrstick = str(input('What would you like to do? (H)it or (S)tick? '))
+            if hitOrstick != 'H' and hitOrstick != 'S':
+                print('Do not be a dummy.  Press H or S for your choice then press Enter key.')
+            elif hitOrstick == 'H':
+                b.hit_player()
+                b.get_board()
+                hitOrstick = ' '
+            elif hitOrstick == 'S':
+                print('You chosen to stick at ', b.pscore)
+                print('It is now the dealers turn.')
+                whoseturn = 'Dealer'
+                break
+        elif b.pscore == 21:
+            print('You have hit 21 !!! Blackjack!  Well done.')
+            print('The dealer can only tie you so you cannot lose.')
+            print('It is now the dealers turn.')
+            whoseturn = 'Dealer'
+            hitOrstick = ' '
+            break
+        elif b.pscore > 21:
+            print('You have busted with a score of ', b.pscore)
+            print('You lost your bet of ' + str(p.bet) + 'chips.')
+            print('Your remaining chip balance is ' + str(playerbalance - p.bet) + 'chips.')
+            print('')
+            playagain = str(input('Would you like to play again? [Y]es or [N]o'))
+            break
+        break
+    
+###########################
+        
+    while whoseturn == 'Dealer':
+        print('Now it is the dealers turn.  He must beat or tie ', b.pscore)
+        print('Press the G key then enter button for dealer to deal his next card: ')
+        dealerhit = input(':')
+        b.get_board()
+        if dealerhit == 'G':
+            b.hit_dealer()
+            b.get_board()
+            dealerhit = ' '
+        else:
+            whoseturn = 'End of Game'
+            break
 
+
+###############
 #Main Game Loop or Class would go Here...
 
 def chip_up(player):    
@@ -224,6 +318,9 @@ if __name__ == '__main__':
     
     table.run_game()
     
+
+
+
     
 #Code yet to be re-organized.  
 ########################################################################     
