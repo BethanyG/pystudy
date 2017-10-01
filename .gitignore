@@ -1,0 +1,9 @@
+__pycache__
+
+
+# sublime text
+*.sublime-project
+*.sublime-workspace
+
+# pytest
+.cache
